@@ -1,4 +1,3 @@
-const { arch } = require("os");
 const path = require("path");
 
 const fullPath = path.join(__dirname, "arquivo.txt");
