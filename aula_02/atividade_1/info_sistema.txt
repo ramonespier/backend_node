@@ -1,0 +1,7 @@
+Plataforma: win32
+Arquitetura: x64
+Informação: [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]
+Diretório: C:\Users\24250469
+Sistema Operacional: Windows_NT
+Versão: Windows 10 Education
+Interface: [object Object]
