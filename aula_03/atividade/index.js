@@ -16,21 +16,43 @@ fs.readFile("dados.json", "utf8", (err, data) => {
     console.log(
       `Nome: ${dados.nome}\nIdade: ${dados.idade}\nCidade: ${dados.cidade}`
     );
-    readline.question("\nO que você deseja alterar?", (dados) => {
-      if (dados == "nome") {
-        readline.question("Digite o novo nome: ", (nome) => {
+    readline.question("Deseja alterar alguma informação?", (Yn) => {
+      if (Yn == "sim" || "yes" || "y") {
+        
+      }
+    });
+    readline.question("\nO que você deseja alterar? \n", (resposta) => {
+      if (resposta == "nome") {
+        readline.question("Digite o novo nome: \n", (nome) => {
           dados.nome = nome;
-          console.log(`Nome alterado para: ${nome}`);
+          const jsonData = JSON.stringify(dados, null, 2);
+          fs.writeFile("dados.json", jsonData, "utf8", (err) => {
+            if (err) {
+              console.log("Erro ao escrever no arquivo: ", err);
+              return;
+            }
+            console.log(
+              `Nome alterado para ${nome}\n\nNome: ${dados.nome}\nIdade: ${dados.idade}\nCidade: ${dados.cidade}`
+            );
+            readline.close();
+          });
+        });
+      }
+
+      if (resposta == "idade") {
+        readline.question("Digite a nova idade: ", (idade) => {
+          resposta.idade = idade;
+          console.log(`Idade alterada para: ${idade}`);
           readline.close();
         });
+      }
 
-        if (dados == "idade") {
-            readline.question("Digite a nova idade: ", (idade) => {
-                dados.idade = idade;
-                console.log(`Idade alterada para: ${idade}`);
-                readline.close();
-                });
-        }
+      if (resposta == "cidade") {
+        readline.question("Digite a nova cidade: ", (cidade) => {
+          resposta.cidade = cidade;
+          console.log(`Cidade alterada para: ${cidade}`);
+          readline.close();
+        });
       }
     });
   } catch {
