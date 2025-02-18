@@ -11,7 +11,6 @@ fs.readFile("dados.json", "utf8", (err, data) => {
     return;
   }
 
-
   try {
     const dados = JSON.parse(data);
     console.log(
@@ -23,18 +22,18 @@ fs.readFile("dados.json", "utf8", (err, data) => {
           dados.nome = nome;
           console.log(`Nome alterado para: ${nome}`);
           readline.close();
-        })
+        });
 
-    } else if (dados == "idade") {
-        readline.question("Digite a nova idade: ", (idade) => {
-            dados.idade = idade;
-            console.log(`Idade alterada para: ${idade}`);
-            readline.close();
-            });
-        })
-    )
-    } catch (err) {
-    console.error(err);
-    readline.close();
-    }
-    
+        if (dados == "idade") {
+            readline.question("Digite a nova idade: ", (idade) => {
+                dados.idade = idade;
+                console.log(`Idade alterada para: ${idade}`);
+                readline.close();
+                });
+        }
+      }
+    });
+  } catch {
+    console.log(err);
+  }
+});
