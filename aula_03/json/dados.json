@@ -1,0 +1,14 @@
+{
+    "nome": "Ramon Coelho",
+    "idade": 19,
+    "endereço": {
+        "rua": "Rua do Sol",
+        "bairro": "Bairro do Sol"
+    },
+    "telefones": [
+        "11-99999-9999",
+        "11-99999-1245"
+    ],
+    "ativo": true,
+    "nulo": null
+}
