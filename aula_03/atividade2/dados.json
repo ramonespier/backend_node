@@ -1,5 +1,5 @@
 {
-    "produto": [
+    "produtos": [
         {
         "Nome":"Bis", "Preço": 8.00, "Descrição": "Chocolate brasileiro gostoso", "Categoria": "Doce"
         },
