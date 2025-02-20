@@ -1,0 +1,13 @@
+{
+    "produto": [
+        {
+        "Nome":"Bis", "Preço": 8.00, "Descrição": "Chocolate brasileiro gostoso", "Categoria": "Doce"
+        },
+        {
+        "Nome":"Twix", "Preço": 4.00, "Descrição": "Chcolate, biscoito e mel", "Categoria": "Doce"
+        },
+        {
+        "Nome":"Trento", "Preço": 4.50, "Descrição": "Melhor do mundo", "Categoria": "Doce"
+        }
+    ]
+}
