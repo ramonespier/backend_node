@@ -13,27 +13,16 @@ fs.readFile("dados.json", "utf8", (err, data) => {
 
   try {
     const dados = JSON.parse(data);
-    console.log(
-      `\nNome: ${dados.nome}\nSobrenome: ${dados.sobrenome}\nIdade: ${dados.idade}\nCidade: ${dados.cidade}\n`
-    );
+    console.log(dados);
 
-    readline.question("Deseja alterar alguma informação? (s/n).\n", (Yn) => {
+    readline.question("Deseja alterar alguma informação? (s/n): ", (Yn) => {
       if (Yn == "sim" || Yn == "yes" || Yn == "y" || Yn == "s") {
-        readline.question("\nO que você deseja alterar? \n", (resposta) => {
-          if (resposta == "nome") {
-            readline.question("Digite o novo nome: \n", (nome) => {
-              // Tratamento de erro para colocar apenas o primeiro nome
-              let nomeNovo = nome;
-              let primeiroNome = nomeNovo.split(" ");
-
-              if (primeiroNome.length > 1) {
-                console.log("\nEscreva apenas o seu primeiro nome.");
-                readline.close();
-                return;
-              }
-              ////////////////////////////////////////////////////////////
-
-              dados.nome = nome;
+        readline.question("\nQual dado você deseja alterar? \n", (resposta) => {
+          readline.question(
+            "Qual informação quer colocar neste dado?",
+            (valor) => {
+              const respostaLower = resposta.toLowerCase();
+              dados[respostaLower] = valor;
 
               const jsonData = JSON.stringify(dados, null, 2);
               fs.writeFile("dados.json", jsonData, "utf8", (err) => {
@@ -42,78 +31,50 @@ fs.readFile("dados.json", "utf8", (err, data) => {
                   return;
                 }
 
-                console.log(
-                  `Nome alterado para ${nome}\n\nNome: ${dados.nome}\nSobrenome: ${dados.sobrenome}\nIdade: ${dados.idade}\nCidade: ${dados.cidade}\n`
+                console.log("Dado adicionado:\n", dados, "\n\n");
+
+                readline.question(
+                  "Deseja adicionar mais algum dado? (s/n): ",
+                  (Yn) => {
+                    if (Yn == "sim" || Yn == "yes" || Yn == "y" || Yn == "s") {
+                      readline.question("\nInsira o dado novo: ", (chave) => {
+                        readline.question("\nAgora escreva sua informação desse dado: ", (valor) => {
+                            dados[chave] = valor;
+
+                            const jsonData = JSON.stringify(dados, null, 2);
+                            fs.writeFile("dados.json", jsonData, "utf8", (err) => {
+                                if (err) {
+                                  console.log("Erro ao escrever no arquivo: ", err);
+                                  return;
+                                }
+
+                                console.log("Dado adicionado:\n", dados, "\n\n");
+                                readline.close();
+                              }
+                            );
+                          }
+                        );
+                      });
+                    } else if (Yn == "nao" || Yn == "n" || Yn == "no") {
+                      console.log("Beleza! Programa encerrado.");
+                      readline.close();
+                    } else {
+                      console.log("Responda apenas com sim ou não.");
+                      readline.close();
+                    }
+                  }
                 );
-                readline.close();
               });
-            });
-          }
-
-          if (resposta == "sobrenome") {
-            readline.question("Digite o novo sobrenome: \n", (sobrenome) => {
-              dados.sobrenome = sobrenome;
-              const jsonData = JSON.stringify(dados, null, 2);
-              fs.writeFile("dados.json", jsonData, "utf8", (err) => {
-                if (err) {
-                  console.log("Erro ao escrever no arquivo: ", err);
-                  return;
-                }
-
-                console.log(
-                  `Sobrenome alterado para ${sobrenome}\n\nNome: ${dados.nome}\nSobrenome: ${dados.sobrenome}\nIdade: ${dados.idade}\nCidade: ${dados.cidade}\n`
-                );
-                readline.close();
-              });
-            });
-          }
-
-          if (resposta == "idade") {
-            readline.question("Digite o novo idade: \n", (idade) => {
-              dados.idade = idade;
-              const jsonData = JSON.stringify(dados, null, 2);
-              fs.writeFile("dados.json", jsonData, "utf8", (err) => {
-                if (err) {
-                  console.log("Erro ao escrever no arquivo: ", err);
-                  return;
-                }
-
-                console.log(
-                  `Nome alterado para ${idade}\n\nNome: ${dados.nome}\nSobrenome: ${dados.sobrenome}\nIdade: ${dados.idade}\nCidade: ${dados.cidade}\n`
-                );
-                readline.close();
-              });
-            });
-          }
-
-          if (resposta == "cidade") {
-            readline.question("Digite o novo cidade: \n", (cidade) => {
-              dados.cidade = cidade;
-
-              const jsonData = JSON.stringify(dados, null, 2);
-              fs.writeFile("dados.json", jsonData, "utf8", (err) => {
-                if (err) {
-                  console.log("Erro ao escrever no arquivo: ", err);
-                  return;
-                }
-
-                console.log(
-                  `Nome alterado para ${cidade}\n\nNome: ${dados.nome}\nSobrenome: ${dados.sobrenome}\nIdade: ${dados.idade}\nCidade: ${dados.cidade}\n`
-                );
-                readline.close();
-              });
-            });
-          }
-          
+            }
+          );
         });
-      } else if (Yn == "nao" || Yn == "não" || Yn == "n" || Yn == "no") {
+      } else if (Yn == "nao" || Yn == "n" || Yn == "no") {
         console.log("Beleza! Programa encerrado.");
         readline.close();
       } else {
         console.log("Responda apenas com sim ou não.");
         readline.close();
       }
-
     });
   } catch {
     console.log(err);
