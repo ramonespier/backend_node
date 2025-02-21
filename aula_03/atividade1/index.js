@@ -22,8 +22,10 @@ fs.readFile("dados.json", "utf8", (err, data) => {
           readline.question(
             "Insira a informação quer colocar neste dado: ",
             (valor) => {
-              const respostaLower = resposta.toLowerCase();
-              dados[respostaLower] = valor;
+              const novaLower = resposta.toLowerCase();
+
+              const dadoInt = isNaN(valor) ? valor : parseInt(valor, 10);
+              dados[novaLower] = dadoInt;
 
               const jsonData = JSON.stringify(dados, null, 2);
               fs.writeFile("dados.json", jsonData, "utf8", (err) => {
@@ -32,7 +34,7 @@ fs.readFile("dados.json", "utf8", (err, data) => {
                   return;
                 }
 
-                console.log(`Dado "${resposta}" alterado:\n`, dados, "\n\n");
+                console.log(`Dado ${resposta} alterado:\n`, dados, "\n\n");
                 readline.close()
               });
             }
