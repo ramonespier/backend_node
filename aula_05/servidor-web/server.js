@@ -10,7 +10,7 @@ const produtos = [
 
 const server = http.createServer((req, res) => {
     const {method, url} = req;
-    console.log(`Requisição recebi: ${method} ${url}`)
+    console.log(`Requisição recebida: ${method} ${url}`)
     
     if (url === "/" && method === "GET") {
         res.writeHead(200, { 'content-type': 'text/html' });
