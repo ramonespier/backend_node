@@ -64,6 +64,9 @@ fs.readFile("dados.json", "utf8", (err, data) => {
               });
 
             });
+          } else if (respostaLower == "nao" || respostaLower == "n" || respostaLower == "no" || respostaLower == "não") {
+            console.log('Programa encerrado.');
+            
           } else {
             console.log("\nResponda apenas com sim ou não.");
             readline.close();
