@@ -1,29 +1,39 @@
 const http = require('http');
 
 const produtos = [
-    {id: 1, nome: "Bis", preço: 11.00},
-    {id: 2, nome: "Twix", preço: 3.50},
-    {id: 3, nome: "Trento", preço: 4.00},
-    {id: 4, nome: "Hersheys", preço: 8.50},
-    {id: 5, nome: "Ouro Branco", preço: 1.50}
+    { id: 1, nome: "Bis", preço: 11.00 },
+    { id: 2, nome: "Twix", preço: 3.50 },
+    { id: 3, nome: "Trento", preço: 4.00 },
+    { id: 4, nome: "Hersheys", preço: 8.50 },
+    { id: 5, nome: "Ouro Branco", preço: 1.50 }
 ]
 
+// fetch("http://localhost:3001/produtos/", {
+//     method: "POST",
+//     body: JSON.stringify({ id: 6, nome: "Fini", preço: 5.00 }),
+//     headers: {
+//         "Content-type": "application/json; charset=UTF-8"
+//     }
+// })
+//     .then((resposta) => resposta.json())
+//     .then((json) => console.log(json));
+
 const server = http.createServer((req, res) => {
-    const {method, url} = req;
-    console.log(`Requisição recebi: ${method} ${url}`)
-    
+    const { method, url } = req;
+    console.log(`Requisição recebida: ${method} ${url}`)
+
     if (url === "/" && method === "GET") {
         res.writeHead(200, { 'content-type': 'text/html' });
         res.end('<h1>Página Inicial</h1>');
-        
+
     } else if (url === '/produtos' && method === 'GET') {
         res.writeHead(200, { 'content-type': 'application/json' });
         res.end(JSON.stringify(produtos));
-        
+
     } else if (url.startsWith('/produtos/') && method === 'GET') {
         const id = parseInt(url.split('/')[2]);
         const produto = produtos.find(p => p.id === id);
-        
+
         if (produto) {
             res.writeHead(200, { 'content-type': 'application/json' });
             res.end(JSON.stringify(produto));
@@ -31,8 +41,8 @@ const server = http.createServer((req, res) => {
             res.writeHead(404, { 'content-type': 'text/html' });
             res.end('<p>Erro 404 <br>Produto não encontrado.</p>');
         }
-    }
 
+    }
 });
 
 const port = 3001;
