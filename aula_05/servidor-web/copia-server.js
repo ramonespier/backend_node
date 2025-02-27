@@ -8,26 +8,16 @@ const produtos = [
     { id: 5, nome: "Ouro Branco", preço: 1.50 }
 ]
 
-// fetch("http://localhost:3001/produtos/", {
-//     method: "POST",
-//     body: JSON.stringify({ id: 6, nome: "Fini", preço: 5.00 }),
-//     headers: {
-//         "Content-type": "application/json; charset=UTF-8"
-//     }
-// })
-//     .then((resposta) => resposta.json())
-//     .then((json) => console.log(json));
-
 const server = http.createServer((req, res) => {
     const { method, url } = req;
     console.log(`Requisição recebida: ${method} ${url}`)
 
     if (url === "/" && method === "GET") {
-        res.writeHead(200, { 'content-type': 'text/html' });
+        res.writeHead(200, { 'Content-Type': 'text/html' });
         res.end('<h1>Página Inicial</h1>');
 
     } else if (url === '/produtos' && method === 'GET') {
-        res.writeHead(200, { 'content-type': 'application/json' });
+        res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(produtos));
 
     } else if (url.startsWith('/produtos/') && method === 'GET') {
@@ -35,17 +25,33 @@ const server = http.createServer((req, res) => {
         const produto = produtos.find(p => p.id === id);
 
         if (produto) {
-            res.writeHead(200, { 'content-type': 'application/json' });
+            res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(produto));
         } else {
-            res.writeHead(404, { 'content-type': 'text/html' });
+            res.writeHead(404, { 'Content-Type': 'text/html' });
             res.end('<p>Erro 404 <br>Produto não encontrado.</p>');
         }
 
+
+        // ENVIAR POST (via curl)
+
+    } else if (url === '/contato' && method === 'POST') {
+        let body = '';
+        req.on('data', chunk => {
+            body += chunk;
+        });
+
+        req.on('end', () => {
+            console.log('Dados recebidos: ', body)
+            res.writeHead(201, {'Content-Type':'text/plain'});
+            res.end('Dados de contato recebidos com sucesso!!!');
+        })
+
+        // curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "nome=Ramon&email=email@email.com" http://localhost:3001/contato
     }
 });
 
 const port = 3001;
 server.listen(port, () => {
-    console.log(`Servidor rodando em http://localhost:${port}`)
+    console.log(`Servidor rodando em http://localhost:${port}`);
 })
