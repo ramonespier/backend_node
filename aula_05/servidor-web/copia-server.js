@@ -44,7 +44,7 @@ const server = http.createServer((req, res) => {
         req.on('end', () => {
             console.log('Dados recebidos: ', body)
             res.writeHead(201, {'Content-Type':'text/plain'});
-            res.end('Dados de contato recebidos com sucesso!!!');
+            res.end('\n\nDados de contato recebidos com sucesso!!!');
         })
 
         // curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "nome=Ramon&email=email@email.com" http://localhost:3001/contato
