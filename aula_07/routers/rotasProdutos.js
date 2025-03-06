@@ -12,7 +12,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
     const novoProduto = req.body;
-    console.log('Usuário cadastrado: ', novoProduto);
+    console.log('Produto cadastrado: ', novoProduto);
     res.status(200).send('\n\nNovo produto cadastrado com sucesso!!!')
 })
 
