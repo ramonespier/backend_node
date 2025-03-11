@@ -22,9 +22,8 @@ router.options('/', (req, res) => {
 })
 
 router.options('/:id', (req, res) => {
-    res.header('Allow', 'GET');
+    res.header('Allow', 'POST');
     res.status(204).send();
 })
-
 
 module.exports = router;
