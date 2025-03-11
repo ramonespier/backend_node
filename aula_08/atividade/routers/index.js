@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs')
 const rotaAdmin = require('./rotaAdmin');
 const rotaGames = require('./rotaGames');
 const app = express();
@@ -6,7 +7,13 @@ const port = 3000;
 
 const logger = (req, res, next) => {
     const data = new Date();
-    console.log(`[${data.toISOString()}] ${req.method} ${req.url}`)
+    const acesso = `[${data.toISOString()}] ${req.method} ${req.url}`
+    console.log(acesso)
+
+    fs.appendFile('log.txt', `${acesso}\n`, err => {
+        if (err) throw err
+        console.log('Horário de acesso monitorado e gravado.')
+    })
     next(); 
 }
 app.use(logger)
