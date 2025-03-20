@@ -1,0 +1,12 @@
+[
+    {"id": 1, "nome": "Blasphemous", "instalado": true},
+    {"id": 2, "nome": "Celeste", "instalado": true},
+    {"id": 3, "nome": "Bloodstained", "instalado": true},
+    {"id": 4, "nome": "Street Fighter 6", "instalado": false},
+    {"id": 5, "nome": "Dragon Ball FighterZ", "instalado": false},
+    {"id": 6, "nome": "Cuphead", "instalado": true},
+    {"id": 7, "nome": "Crow Country", "instalado": true},
+    {"id": 8, "nome": "The Legend of Zelda: Ocarina of Time", "instalado": true},
+    {"id": 9, "nome": "Minecraft", "instalado": true},
+    {"id": 10, "nome": "The Sims 4", "instalado": true}
+]
