@@ -38,7 +38,7 @@ async function exibirMenu() {
     ];
 
     try {
-        const resposta = await inquirer.prompt(menuPrincipal[0]);
+        const resposta = await inquirer.prompt(menuPrincipal);
         switch (resposta.opcao) {
             case 'listar':
                 const produtos = await listarProdutos();
@@ -70,22 +70,23 @@ async function exibirMenu() {
 
                 break
 
+                // const idResposta = await inquirer.prompt([
+                //     {
+                //         type: 'input',
+                //         name: 'id',
+                //         message: chalk.blue('\nDigite o ID do produto: \n')
+                //     }
+                // ]);
+    
+                // const produto = await exibirDetalhesProduto(idResposta.id)
+                // console.log('\n', produto, '\n');
+                // exibirMenu();
+                // break;
+
             case 'sair':
-                console.log(chalk.cyan('Saindo do sistema. . . . . .'));
+                console.log(chalk.cyan('Saindo do sistema . . . . . .'));
                 break
 
-            // const idResposta = await inquirer.prompt([
-            //     {
-            //         type: 'input',
-            //         name: 'id',
-            //         message: chalk.blue('\nDigite o ID do produto: \n')
-            //     }
-            // ]);
-
-            // const produto = await exibirDetalhesProduto(idResposta.id)
-            // console.log('\n', produto, '\n');
-            // exibirMenu();
-            // break;
         }
     } catch (error) {
         console.error(chalk.red('Ocorreu um erro inesperado', error))
