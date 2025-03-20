@@ -24,7 +24,7 @@ async function exibirDetalhesProduto(id) {
 }
 
 async function exibirMenu() {
-    const perguntas = [
+    const menuPrincipal = [
         {
             type: 'list',
             name: 'opcao',
@@ -34,22 +34,11 @@ async function exibirMenu() {
                 { name: chalk.greenBright('Exibir detalhes do produto'), value: 'exibir' },
                 { name: chalk.red('Sair'), value: 'sair' }
             ]
-        },
-        // {
-        //     type: 'list',
-        //     name: 'selecionarProduto',
-        //     message: chalk.yellowBright('Selecione um produto: '),
-        //     choices: [
-        //         { name: chalk.cyan.bold('Calça'), value: 'calca', id: 1 },
-        //         { name: chalk.cyan.bold('Camiseta'), value: 'camiseta', id: 2 },
-        //         { name: chalk.cyan.bold('Meia'), value: 'meia', id: 3 },
-        //         { name: chalk.cyan.bold('Boné'), value: 'bone', id: 4 }
-        //     ]
-        // }
+        }
     ];
 
     try {
-        const resposta = await inquirer.prompt(perguntas);
+        const resposta = await inquirer.prompt(menuPrincipal[0]);
         switch (resposta.opcao) {
             case 'listar':
                 const produtos = await listarProdutos();
@@ -58,39 +47,50 @@ async function exibirMenu() {
                 break
 
             case 'exibir':
-                const idResposta = await inquirer.prompt([
+                const menuProdutos = [
                     {
-                        type: 'input',
-                        name: 'id',
-                        message: chalk.blue('\nDigite o ID do produto: \n')
+                        type: 'list',
+                        name: 'selecionarProduto',
+                        message: chalk.yellowBright('\nSelecione um produto: '),
+                        choices: [
+                            { name: chalk.cyan.bold('Calça'), value: 1 },
+                            { name: chalk.cyan.bold('Camiseta'), value: 2 },
+                            { name: chalk.cyan.bold('Meia'), value: 3 },
+                            { name: chalk.cyan.bold('Boné'), value: 4 }
+                        ]
                     }
-                ]);
+                ]
 
-                const produto = await exibirDetalhesProduto(idResposta.id)
-                console.log('\n', produto, '\n');
-                exibirMenu();
-                break;
+                const respostaProduto = await inquirer.prompt(menuProdutos)
+                const idProduto = respostaProduto.selecionarProduto;
+
+                const detalhes = await exibirDetalhesProduto(idProduto)
+                console.log('\n', detalhes, '\n');
+                exibirMenu()
+
+                break
 
             case 'sair':
                 console.log(chalk.cyan('Saindo do sistema. . . . . .'));
                 break
 
+            // const idResposta = await inquirer.prompt([
+            //     {
+            //         type: 'input',
+            //         name: 'id',
+            //         message: chalk.blue('\nDigite o ID do produto: \n')
+            //     }
+            // ]);
+
+            // const produto = await exibirDetalhesProduto(idResposta.id)
+            // console.log('\n', produto, '\n');
+            // exibirMenu();
+            // break;
         }
     } catch (error) {
         console.error(chalk.red('Ocorreu um erro inesperado', error))
     }
-
-    // try {
-    //     const resposta = await inquirer.prompt(perguntas);
-    //     switch (resposta.selecionarProduto) {
-    //         case 'calca':
-    //         const 
-    //     }
-
-    // } catch {
-
-    // }
 }
-    
+
 
 exibirMenu();
