@@ -42,7 +42,17 @@ async function exibirMenu() {
         switch (resposta.opcao) {
             case 'listar':
                 const produtos = await listarProdutos();
-                console.log(produtos);
+                if (Array.isArray(produtos) && produtos.length > 0) {
+                    console.log(chalk.green('Lista de produtos: '));
+                    console.log('\n\n')
+                    produtos.forEach(produto => {
+                        console.log(`${chalk.cyanBright(produto.id)}: ${chalk.greenBright(produto.nome)} - R$ ${chalk.yellowBright.bold(produto.preco)}`);
+                    });
+                    console.log('\n\n')
+                } else {
+                    console.log(chalk.yellowBright.bold('Nenhum produto encontrado.'))
+                }
+
                 exibirMenu();
                 break
 
@@ -61,14 +71,16 @@ async function exibirMenu() {
                     }
                 ]
 
-                const respostaProduto = await inquirer.prompt(menuProdutos)
+                const respostaProduto = await inquirer.prompt(menuProdutos);
                 const idProduto = respostaProduto.selecionarProduto;
 
-                const detalhes = await exibirDetalhesProduto(idProduto)
-                console.log('\n', detalhes, '\n');
-                exibirMenu()
-
-                break
+                const detalhes = await exibirDetalhesProduto(idProduto);
+                console.log('\n\n')
+                console.log(chalk.greenBright.bold('Detalhes do produto:'))
+                console.log(`${chalk.cyanBright(detalhes.id)}: ${chalk.greenBright(detalhes.nome)} - R$ ${chalk.yellowBright.bold(detalhes.preco)}`);
+                console.log('\n\n')
+                exibirMenu();
+                break;
 
                 // const idResposta = await inquirer.prompt([
                 //     {
@@ -77,9 +89,19 @@ async function exibirMenu() {
                 //         message: chalk.blue('\nDigite o ID do produto: \n')
                 //     }
                 // ]);
-    
+
                 // const produto = await exibirDetalhesProduto(idResposta.id)
-                // console.log('\n', produto, '\n');
+                // if (produto) {
+                //     console.log('\n\n')
+                //     console.log(chalk.greenBright.bold('Detalhes do produto: '))
+                //     console.log(`${chalk.cyanBright(produto.id)}: ${chalk.greenBright(produto.nome)} - R$ ${chalk.yellowBright.bold(produto.preco)}`);
+                //     console.log('\n\n')
+                // } else {
+                //     console.log('\n\n')
+                //     console.log(chalk.yellowBright('Produto não encontrado.'))
+                //     console.log('\n\n')
+                // }
+
                 // exibirMenu();
                 // break;
 
