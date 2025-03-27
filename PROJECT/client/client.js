@@ -3,6 +3,9 @@ import axios from 'axios';
 import chalk from 'chalk';
 import fs from 'fs';
 
+const data = fs.readFileSync('../server/repoJogos.json', 'utf8')
+const dados = JSON.parse(data)
+
 const API_URL = 'http://localhost:3000'
 async function listarRepositorio() {
     try {
@@ -111,27 +114,29 @@ async function exibirMenu() {
                         message: chalk.blue('\nQual o nome desse jogo?\n')
                     },
                     {
-                        type: 'checkbox',
+                        type: 'input',
                         name: 'instalado',
-                        message: chalk.blue('\nDeseja instalar?\n'),
-                        choices: [
-                            {name: 'SIM', value: 'Instalado'},
-                            {name: 'NÃO', value: 'Salvo'}
-                        ]
+                        message: chalk.blue('\nDeseja instalar? (sim / não)\n'),
                     }
                 ])
 
-                const dadoNovo = jogoNovo.id + jogoNovo.nome + jogoNovo.instalado
-                dadoNovo.push()
 
-                fs.writeFileSync('../server/repoJogos.json', dadoNovo, 'utf8', (err) => {
-                    if (err) throw err;
-                })
+                try {
+                    jogoNovo.id = parseInt(jogoNovo.id)
+                    dados.push(jogoNovo)
+
+                    const jsonData = JSON.stringify(dados, null, 2)
+
+                    console.log(chalk.greenBright.bold('Jogo adicionado ao repositório com sucesso!'))
+                    fs.writeFileSync('../server/repoJogos.json', jsonData)
+
+                } catch (error) {
+                    console.error(chalk.yellow('Ocorreu um erro ao adicionar seu jogo ao repositório: ', error))
+                }
 
         }
     } catch (error) {
         console.error(chalk.red('Ocorreu um erro inesperado', error))
     }
 }
-
-exibirMenu()
+exibirMenu();
