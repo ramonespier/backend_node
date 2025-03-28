@@ -12,7 +12,7 @@ try {
 }
 
 router.get('/', (req, res) => {
-    // res.status(200).send('Repósitorio de Jogos')
+    res.status(200).send('Repósitorio de Jogos')
     res.json(jogos);
 })
 
@@ -33,7 +33,7 @@ router.post('/', (req, res) => {
 })
 
 router.options('/', (req, res) => {
-    res.header('Allow', 'GET');
+    res.header('Allow', 'GET, POST, DELETE, PATCH');
     res.status(204).send()
 })
 

@@ -27,21 +27,6 @@ async function exibirDetalhesJogo(id) {
     }
 }
 
-async function postJogo() {
-    const response = await axios.post(`${API_URL}/repositorio/`, {
-        id: `${idJogo}`,
-        nome: `${nomeJogo}`,
-        instalado: `${instaladoJogo}`
-    })
-
-        .then(response => {
-            console.log('Jogo recebido: ', response.data)
-        })
-        .catch(error => {
-            console.log('Ocorreu um erro: ', error)
-        })
-}
-
 async function exibirMenu() {
     const menuPrincipal = [
         {
@@ -114,9 +99,48 @@ async function exibirMenu() {
                         message: chalk.blue('\nQual o nome desse jogo?\n')
                     },
                     {
-                        type: 'input',
+                        type: 'list',
                         name: 'instalado',
-                        message: chalk.blue('\nDeseja instalar? (sim / não)\n'),
+                        message: chalk.blue('\nDeseja instalar?\n'),
+                        choices: [
+                            { 
+                                name: "Sim",
+                                value: "Sim"
+                            },
+                            { 
+                                name: "Não", 
+                                value: "Não"
+                            },
+                            
+                        ]
+                    },
+                    {
+                        type: 'checkbox',
+                        name: 'genero',
+                        message: chalk.blue('\nQual o gênero desse jogo?\n'),
+                        choices: [
+                            {
+                                name: "Ação", value: "Ação",
+                            },
+                            {
+                                name: "Ação", value: "Ação",
+                            },
+                            {
+                                name: "Ação", value: "Ação",
+                            },
+                            {
+                                name: "Ação", value: "Ação",
+                            },
+                            {
+                                name: "Ação", value: "Ação",
+                            },
+                            {
+                                name: "Ação", value: "Ação",
+                            },
+                            {
+                                name: "Ação", value: "Ação",
+                            },
+                        ]
                     }
                 ])
 

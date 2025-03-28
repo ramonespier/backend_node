@@ -15,16 +15,16 @@ try {
     jogos = [];
 }
 
-app.get('/', (req, res) => {
-    res.status(200).send('<h1>HOME</h1>')
-})
-
 app.use('/repositorio', rotaRepositorio);
 app.use('/repositorio/:id', rotaRepositorio);
 app.use('/admin', rotaAdmin)
 app.use((req, res) => {
     res.status(404).send('<h1 style="color: red;">ERRO 404</h1><br><p style="font-weight:bold;">Página não encontrada</p>')
 });
+
+app.get('/', (req, res) => {
+    res.status(200).send('<h1>HOME</h1>')
+})
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`)
