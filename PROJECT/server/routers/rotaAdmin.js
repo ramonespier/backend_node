@@ -22,19 +22,20 @@ router.use(logger)
 
 router.get('/', autenticar, (req, res) => {
     res.status(200).send('Painel de controle liberado.')
-    console.log("MODO DE ADMINISTRADOR ACESSADO") // ---------------------------- TESTE PARA ESREVER NO SERVER
-})
-
-router.post('/', autenticar, (req, res) => {
-    const novoJogo = req.body;
-    res.status(201).send('Produto cadastrado: ', novoJogo)
-    console.log("Novo produto cadastrado:", novoJogo)
+    console.log("MODO DE ADMINISTRADOR ACESSADO")
 })
 
 router.options('/', autenticar, (req, res) => {
     res.header('Allow', 'GET, POST, DELETE, PATCH');
     res.status(204).send()
 })
+
+router.post('/', (req, res) => {
+    const novoJogo = req.body;
+    res.status(201).send('Produto cadastrado: ', novoJogo)
+    console.log("Novo produto cadastrado:", novoJogo)
+})
+
 
 
 module.exports = router
