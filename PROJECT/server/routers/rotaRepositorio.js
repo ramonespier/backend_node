@@ -21,6 +21,7 @@ router.get('/:id', (req, res) => {
     const jogo = jogos.find(p => p.id === id)
     if (jogo) {
         res.json(jogo)
+        console.log('Acessando produto específico por ID')
     } else {
         res.status(404).send('<h1 style="color: red;">ERRO 404</h1><br><p style="font-weight:bold;">Página não encontrada</p>')
     }

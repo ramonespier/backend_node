@@ -21,14 +21,14 @@ const logger = (req, res, next) => {
 router.use(logger)
 
 router.get('/', autenticar, (req, res) => {
-    res.status(200).send('<h1>Painel de controle</h1>')
+    res.status(200).send('Painel de controle liberado.')
     console.log("MODO DE ADMINISTRADOR ACESSADO") // ---------------------------- TESTE PARA ESREVER NO SERVER
 })
 
 router.post('/', autenticar, (req, res) => {
     const novoJogo = req.body;
     res.status(201).send('Produto cadastrado: ', novoJogo)
-    res.status(201).send("Novo produto cadastrado com sucesso!")
+    console.log("Novo produto cadastrado:", novoJogo)
 })
 
 router.options('/', autenticar, (req, res) => {

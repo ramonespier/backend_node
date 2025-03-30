@@ -30,7 +30,7 @@ async function exibirDetalhesJogo(id) {
 async function debugAdmin(id) {
 
     const authentic = {
-        headers:{
+        headers: {
             'authorization': "SEGREDO"
         }
     }
@@ -216,8 +216,7 @@ async function exibirMenu() {
                                         ]
                                     }
                                 ])
-                                
-                                
+
                                 try {
                                     jogoNovo.id = parseInt(jogoNovo.id)
 
@@ -232,7 +231,7 @@ async function exibirMenu() {
                                         console.log(chalk.greenBright.bold('Jogo adicionado ao repositório com sucesso!'));
                                         fs.writeFileSync('../server/repoJogos.json', jsonData);
                                     }
-                                    
+
 
 
                                 } catch (error) {
