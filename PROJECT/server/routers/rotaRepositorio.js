@@ -12,8 +12,8 @@ try {
 }
 
 router.get('/', (req, res) => {
-    res.status(200).send('Repósitorio de Jogos')
-    res.json(jogos);
+    // res.status(200).send('Repósitorio de Jogos')
+   res.status(200).json(jogos);
 })
 
 router.get('/:id', (req, res) => {
@@ -26,14 +26,8 @@ router.get('/:id', (req, res) => {
     }
 })
 
-router.post('/', (req, res) => {
-    const novoJogo = req.body;
-    console.log('Produto cadastrado: ', novoJogo)
-    res.status(201).send("Novo produto cadastrado com sucesso!")
-})
-
 router.options('/', (req, res) => {
-    res.header('Allow', 'GET, POST, DELETE, PATCH');
+    res.header('Allow', 'GET');
     res.status(204).send()
 })
 
