@@ -26,6 +26,24 @@ async function exibirDetalhesJogo(id) {
         return null;
     }
 }
+
+async function debugAdmin(id) {
+
+    const authentic = {
+        headers:{
+            'authorization': "SEGREDO"
+        }
+    }
+
+    try {
+        const response = await axios.get(`${API_URL}/admin`, authentic)
+        return response.data
+    } catch (error) {
+        console.error(chalk.red.bold.underline(`Produto com o ID '${id}' não encontrado.`, error.message))
+        return null;
+    }
+}
+
 async function exibirMenu() {
     const menuPrincipal = [
         {
@@ -112,6 +130,10 @@ async function exibirMenu() {
 
                     if (autenticar.autenticar === 'SEGREDO') {
                         console.log(chalk.greenBright.bold('\nSenha correta. Acessando menu do administrador . . .\n'))
+
+                        const sendAuntentica = await debugAdmin(1)
+                        console.log(sendAuntentica)
+
                         const respostaAdm = await inquirer.prompt(menuAdmin);
                         switch (respostaAdm.opcaoAdm) {
 

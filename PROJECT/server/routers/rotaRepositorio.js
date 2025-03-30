@@ -12,8 +12,8 @@ try {
 }
 
 router.get('/', (req, res) => {
-    // res.status(200).send('Repósitorio de Jogos')
-   res.status(200).json(jogos);
+    res.status(200).json(jogos);
+    console.log("Acessando lista de produtos")
 })
 
 router.get('/:id', (req, res) => {
