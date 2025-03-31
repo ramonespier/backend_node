@@ -218,6 +218,19 @@ async function exibirMenu() {
                                 ])
 
                                 try {
+
+                                    // axios.post('http://localhost:3000/admin/', {
+                                    //     nome: jogoNovo.nome,
+                                    //     instalado: jogoNovo.instalado,
+                                    //     genero: jogoNovo.genero
+                                    // })
+
+                                    // .then(response => {
+                                    //     console.log('Jogo novo adicionado: ', response.data)
+                                    // })
+                                    // .catch(error => {
+                                    //     console.log('Ocorreu um erro: ', error)
+                                    // })
                                     jogoNovo.id = parseInt(jogoNovo.id)
 
                                     if (dados.some(jogo => jogo.id === jogoNovo.id)) {
