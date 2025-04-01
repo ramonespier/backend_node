@@ -86,7 +86,7 @@ async function exibirMenu() {
                     if (Array.isArray(jogos) && (jogos.length > 0)) {
                         console.log(chalk.greenBright('Jogos da sua lista:'))
                         jogos.forEach(jogo => {
-                            console.log(`${chalk.cyanBright(jogo.id)}: ${chalk.greenBright(jogo.nome)} Instalado: ${chalk.yellowBright.bold(jogo.instalado)} Gênero: ${chalk.magentaBright.bold(jogo.genero)}`)
+                            console.log(`${chalk.cyanBright(jogo.id)}: ${chalk.greenBright(jogo.nome)} Instalado: ${chalk.yellowBright.bold(jogo.instalado)}`)
                         })
                         console.log('\n\n')
                     } else {
@@ -108,7 +108,7 @@ async function exibirMenu() {
                     if (jogo) {
                         console.log('\n\n')
                         console.log(chalk.greenBright.bold('Detalhes do jogo: '))
-                        console.log(`${chalk.cyanBright(jogo.id)}: ${chalk.greenBright(jogo.nome)} - Instalado: ${chalk.yellowBright.bold(jogo.instalado)}`);
+                        console.log(`${chalk.cyanBright(jogo.id)}: ${chalk.greenBright(jogo.nome)} - Gênero: ${chalk.magentaBright.bold(jogo.genero)}`);
                         console.log('\n\n')
                     } else {
                         console.log('\n\n')
@@ -136,6 +136,44 @@ async function exibirMenu() {
 
                         const respostaAdm = await inquirer.prompt(menuAdmin);
                         switch (respostaAdm.opcaoAdm) {
+
+                            case 'listar':
+                                const jogos = await listarRepositorio();
+                                if (Array.isArray(jogos) && (jogos.length > 0)) {
+                                    console.log(chalk.greenBright('Jogos da sua lista:'))
+                                    jogos.forEach(jogo => {
+                                        console.log(`${chalk.cyanBright(jogo.id)}: ${chalk.greenBright(jogo.nome)} Instalado: ${chalk.yellowBright.bold(jogo.instalado)}`)
+                                    })
+                                    console.log('\n\n')
+                                } else {
+                                    console.log(chalk.yellowBright.bold('Nenhum jogo encontrado'))
+                                }
+                                exibirMenu()
+                                break
+
+                            case 'exibir':
+                                const idResposta = await inquirer.prompt([
+                                    {
+                                        type: 'input',
+                                        name: 'id',
+                                        message: chalk.blue('\nDigite o ID do produto: \n')
+                                    }
+                                ]);
+
+                                const jogo = await exibirDetalhesJogo(idResposta.id)
+                                if (jogo) {
+                                    console.log('\n\n')
+                                    console.log(chalk.greenBright.bold('Detalhes do jogo: '))
+                                    console.log(`${chalk.cyanBright(jogo.id)}: ${chalk.greenBright(jogo.nome)} - Gênero: ${chalk.magentaBright.bold(jogo.genero)}`);
+                                    console.log('\n\n')
+                                } else {
+                                    console.log('\n\n')
+                                    console.log(chalk.yellowBright('Jogo não encontrado.'))
+                                    console.log('\n\n')
+                                }
+
+                                exibirMenu();
+                                break;
 
                             case 'post':
 
@@ -218,23 +256,17 @@ async function exibirMenu() {
                                 ])
 
                                 try {
-
-                                    // axios.post('http://localhost:3000/admin/', {
-                                    //     nome: jogoNovo.nome,
-                                    //     instalado: jogoNovo.instalado,
-                                    //     genero: jogoNovo.genero
-                                    // })
-
-                                    // .then(response => {
-                                    //     console.log('Jogo novo adicionado: ', response.data)
-                                    // })
-                                    // .catch(error => {
-                                    //     console.log('Ocorreu um erro: ', error)
-                                    // })
-                                    jogoNovo.id = parseInt(jogoNovo.id)
-
+                                    
+                                    
+                                    if (isNaN(jogoNovo.id)) {
+                                        console.log(chalk.yellow.bold('O ID deve ser um número inteiro'))
+                                        exibirMenu()
+                                        return;
+                                    }
                                     if (dados.some(jogo => jogo.id === jogoNovo.id)) {
                                         console.log(chalk.yellow.bold("    Impossível criar um produto com ID já existente.\n    Verifique a lista de jogos e veja quais ID's voce pode usar."));
+                                        exibirMenu()
+                                        return;
                                         // A função some() executa a função callback uma vez para cada elemento do array até encontrar aquele em que a função callback retorne true. Então o método some() retorna true imediatamente e não avalia os elementos restantes.Se nenhum elemento fizer a função callback retornar true, o método some() vai retornar false. 
                                         // medium.com
 
@@ -243,12 +275,22 @@ async function exibirMenu() {
                                         const jsonData = JSON.stringify(dados, null, 2);
                                         console.log(chalk.greenBright.bold('Jogo adicionado ao repositório com sucesso!'));
                                         fs.writeFileSync('../server/repoJogos.json', jsonData);
+                                        exibirMenu()
+
                                     }
 
+                                    axios.post(`${API_URL}/admin`, jogoNovo, {
+                                        headers: {
+                                            'Authorization': 'SEGREDO',
+                                            'Content-Type': 'application/json'
+                                        }
+                                    });
 
+                                    console.log(chalk.greenBright.bold('\n\n\nJogo adicionado:\n\n\n'), jogoNovo.nome);
+                                    // console.log(response.data)
 
                                 } catch (error) {
-                                    console.error(chalk.yellow('Ocorreu um erro ao adicionar seu jogo ao repositório: ', error))
+                                    console.error(chalk.red('Erro ao enviar para o servidor:'), error.message);
                                 }
                         }
 

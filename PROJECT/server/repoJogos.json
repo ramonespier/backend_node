@@ -1,52 +1,62 @@
 [
-    {
-        "id": 1,
-        "nome": "Blasphemous",
-        "instalado": "SIM"
-    },
-    {
-        "id": 2,
-        "nome": "Celeste",
-        "instalado": "SIM"
-    },
-    {
-        "id": 3,
-        "nome": "Bloodstained",
-        "instalado": "SIM"
-    },
-    {
-        "id": 4,
-        "nome": "Street Fighter 6",
-        "instalado": "NÃO"
-    },
-    {
-        "id": 5,
-        "nome": "Dragon Ball FighterZ",
-        "instalado": "NÃO"
-    },
-    {
-        "id": 6,
-        "nome": "Cuphead",
-        "instalado": "SIM"
-    },
-    {
-        "id": 7,
-        "nome": "Crow Country",
-        "instalado": "SIM"
-    },
-    {
-        "id": 8,
-        "nome": "The Legend of Zelda: Ocarina of Time",
-        "instalado": "SIM"
-    },
-    {
-        "id": 9,
-        "nome": "Minecraft",
-        "instalado": "SIM"
-    },
-    {
-        "id": 10,
-        "nome": "The Sims 4",
-        "instalado": "SIM"
-    }
+  {
+    "id": 1,
+    "nome": "Blasphemous",
+    "instalado": "SIM",
+    "genero": []
+  },
+  {
+    "id": 2,
+    "nome": "Celeste",
+    "instalado": "SIM",
+    "genero": []
+  },
+  {
+    "id": 3,
+    "nome": "Bloodstained",
+    "instalado": "SIM",
+    "genero": []
+  },
+  {
+    "id": 4,
+    "nome": "Street Fighter 6",
+    "instalado": "NÃO",
+    "genero": []
+  },
+  {
+    "id": 5,
+    "nome": "Dragon Ball FighterZ",
+    "instalado": "NÃO",
+    "genero": []
+  },
+  {
+    "id": 6,
+    "nome": "Cuphead",
+    "instalado": "SIM",
+    "genero": []
+  },
+  {
+    "id": 7,
+    "nome": "Crow Country",
+    "instalado": "SIM",
+    "genero": []
+  },
+  {
+    "id": 8,
+    "nome": "The Legend of Zelda: Ocarina of Time",
+    "instalado": "SIM",
+    "genero": []
+  },
+  {
+    "id": 9,
+    "nome": "Minecraft",
+    "instalado": "SIM",
+    "genero": []
+  },
+  {
+    "id": 10,
+    "nome": "The Sims 4",
+    "instalado": "SIM",
+    "genero": []
+  }
 ]

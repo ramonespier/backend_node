@@ -2,13 +2,15 @@ const express = require('express')
 const fs = require('fs')
 const router = express.Router()
 
+router.use(express.json())
+
 const autenticar = (req, res, next) => {
     const token = req.headers['authorization']
     if (token === 'SEGREDO') {
         // router.send('Usuario autenticado como admin')
         next()
     } else {
-            res.status(401).send('<h1 style="color: red;">ERRO 401</h1><br><p style="font-weight:bold;">Sem autorização</p>')
+        res.status(401).send('<h1 style="color: red;">ERRO 401</h1><br><p style="font-weight:bold;">Sem autorização</p>')
     }
 }
 
@@ -30,12 +32,9 @@ router.options('/', autenticar, (req, res) => {
     res.status(204).send()
 })
 
-router.post('/', (req, res) => {
+router.post('/', autenticar, (req, res) => {
     const novoJogo = req.body;
-    res.status(201).send('Produto cadastrado: ', novoJogo)
-    console.log("Novo produto cadastrado:", novoJogo)
+    console.log("Novo jogo cadastrado:", novoJogo)
 })
-
-
 
 module.exports = router
