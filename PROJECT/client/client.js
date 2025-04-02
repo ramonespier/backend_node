@@ -27,7 +27,7 @@ async function exibirDetalhesJogo(id) {
     }
 }
 
-async function debugAdmin(id) {
+async function loginAdmin(id) {
 
     const authentic = {
         headers: {
@@ -44,15 +44,32 @@ async function debugAdmin(id) {
     }
 }
 async function patchInfo(id, key, value) {
-    const body = { body: { key: key, value: value } }
-    // id = patchJogo.idJogo
-    axios.patch(`${API_URL}/admin/${id}`, body, {
-        headers: {
+    const body = { [key]: value }
+
+    try {
+        await axios.patch(`${API_URL}/admin/${id}`, body, {
+            headers: {
+                'Authorization': 'SEGREDO',
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log(chalk.green.bold('Jogo atualizado com sucesso!'));
+    } catch (error) {
+        console.error(chalk.red.underline('Insira um ID existente.\n'), error.message);
+        exibirMenu()
+    }
+}
+
+async function deleteInfo(id) {
+    const resDelete = await axios.delete(`${API_URL}/admin/${id}`, {
+        headers: { 
             'Authorization': 'SEGREDO',
             'Content-Type': 'application/json'
-        }
-    })
+         }
+    });
+    return resDelete.data;
 }
+
 
 async function exibirMenu() {
     const menuPrincipal = [
@@ -141,7 +158,7 @@ async function exibirMenu() {
                     if (autenticar.autenticar === 'SEGREDO') {
                         console.log(chalk.greenBright.bold('\nSenha correta. Acessando menu do administrador . . .\n'))
 
-                        const sendAuntentica = await debugAdmin(1)
+                        const sendAuntentica = await loginAdmin(1)
                         console.log(sendAuntentica)
 
                         const respostaAdm = await inquirer.prompt(menuAdmin);
@@ -333,7 +350,7 @@ async function exibirMenu() {
                                                 message: chalk.blue('\nDigite o nome novo desse jogo: ')
                                             }
                                         ])
-                                        patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, nomeNovo.nomeNovo)
+                                        await patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, nomeNovo.nomeNovo);
                                         break;
 
                                     case 'instalado':
@@ -343,8 +360,8 @@ async function exibirMenu() {
                                                 name: 'statusInstalado',
                                                 message: chalk.yellowBright.bold('\nSeu jogo continua instalado?'),
                                                 choices: [
-                                                    { name: 'Sim', value: 'sim' },
-                                                    { name: 'Não', value: 'nao' },
+                                                    { name: 'Sim', value: 'SIM' },
+                                                    { name: 'Não', value: 'NÃO' },
                                                 ]
                                             }
                                         ])
@@ -405,17 +422,37 @@ async function exibirMenu() {
                                         ])
                                         patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, generoNovo.generoNovo)
                                         break;
-
-
                                 }
-                            // patchJogo.idJogo = parseInt(patchJogo.idJogo)
 
+                            case 'delete':
+                                const excluirJogo = await inquirer.prompt([
+                                    {
+                                        type: 'input',
+                                        name: 'id',
+                                        message: chalk.blue('\nDigite o ID do jogo a ser removido: ')
+                                    }
+                                ])
 
+                                const id = parseInt(excluirJogo.id)
+                                if (isNaN(id)) {
+                                    console.log(chalk.red.bold('O ID deve ser um número inteiro'))
+                                    exibirMenu()
+                                    return;
+                                }
+
+                                try {
+                                    await deleteInfo(excluirJogo.id)
+                                    console.log(chalk.green.bold('\nJogo removido com sucesso!'));
+                                } catch (error) {
+                                    console.log(chalk.red('Erro ao remover o jogo', error.message))
+                                }
+
+                                exibirMenu()
+                                break;
                         }
                     } else {
                         console.log(chalk.red.underline('\nSenha incorreta\n'))
                     }
-
 
             }
         } catch (error) {

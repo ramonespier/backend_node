@@ -58,29 +58,5 @@
     "nome": "The Sims 4",
     "instalado": "SIM",
     "genero": []
-  },
-  {
-    "id": "11",
-    "nome": "SIM",
-    "instalado": "Sim",
-    "genero": [
-      "Ação"
-    ]
-  },
-  {
-    "id": 12,
-    "nome": "JOGO INT",
-    "instalado": "Sim",
-    "genero": [
-      "Ação"
-    ]
-  },
-  {
-    "id": 66,
-    "nome": "A",
-    "instalado": "Sim",
-    "genero": [
-      "Ação"
-    ]
   }
 ]

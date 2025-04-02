@@ -14,7 +14,7 @@ axios.get('http://localhost:3000/admin',
     .then(response => {
         console.log(response.config.url)
         console.log(response.config.method)
-        console.log('Dados recebidos: ', response.data)
+        console.log(chalk.magentaBright.bold('Dados recebidos: ', response.data))
     })
     .catch(error => {
         console.log('Ocorreu um erro: ', error.message)
