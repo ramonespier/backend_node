@@ -37,4 +37,17 @@ router.post('/', autenticar, (req, res) => {
     console.log("Novo jogo cadastrado:", novoJogo)
 })
 
+router.patch('/:id', autenticar, (req, res) => {
+    const id = parseInt(req.params.id)
+    const dados = fs.readFileSync('../repoJogos.json')
+    const key = (req.body.key)
+    const value = (req.body.value)
+    const dadosTexto = JSON.parse(dados)
+    const jsonData = dadosTexto.find(p => p.id === id)
+    jsonData[key] = value;
+    dados  
+    fs.writeFileSync(dados, null, 2);
+    console.log(key)
+})
+
 module.exports = router

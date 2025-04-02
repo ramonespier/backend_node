@@ -43,6 +43,16 @@ async function debugAdmin(id) {
         return null;
     }
 }
+async function patchInfo(id, key, value) {
+    const body = { body: { key: key, value: value } }
+    // id = patchJogo.idJogo
+    axios.patch(`${API_URL}/admin/${id}`, body, {
+        headers: {
+            'Authorization': 'SEGREDO',
+            'Content-Type': 'application/json'
+        }
+    })
+}
 
 async function exibirMenu() {
     const menuPrincipal = [
@@ -256,8 +266,8 @@ async function exibirMenu() {
                                 ])
 
                                 try {
-                                    
-                                    
+
+                                    jogoNovo.id = parseInt(jogoNovo.id)
                                     if (isNaN(jogoNovo.id)) {
                                         console.log(chalk.yellow.bold('O ID deve ser um número inteiro'))
                                         exibirMenu()
@@ -286,21 +296,125 @@ async function exibirMenu() {
                                         }
                                     });
 
-                                    console.log(chalk.greenBright.bold('\n\n\nJogo adicionado:\n\n\n'), jogoNovo.nome);
+                                    console.log(chalk.greenBright.bold('\n\n\nJogo adicionado:'), jogoNovo.nome);
                                     // console.log(response.data)
 
                                 } catch (error) {
                                     console.error(chalk.red('Erro ao enviar para o servidor:'), error.message);
                                 }
-                        }
+                                exibirMenu()
+                                break;
 
+                            case 'patch':
+                                const patchJogo = await inquirer.prompt([
+                                    {
+                                        type: 'input',
+                                        name: 'idJogo',
+                                        message: chalk.blue('\nDigite o ID do jogo que deseja alterar informação: ')
+                                    },
+                                    {
+                                        type: 'list',
+                                        name: 'opcaoPatch',
+                                        message: chalk.cyanBright.bold('Qual informação você deseja alterar?'),
+                                        choices: [
+                                            { name: 'Nome: ', value: 'nome' },
+                                            { name: 'Instalado? ', value: 'instalado' },
+                                            { name: 'Gênero: ', value: 'genero' },
+                                        ]
+                                    }
+                                ])
+
+                                switch (patchJogo.opcaoPatch) {
+                                    case 'nome':
+                                        const nomeNovo = await inquirer.prompt([
+                                            {
+                                                type: 'input',
+                                                name: 'nomeNovo',
+                                                message: chalk.blue('\nDigite o nome novo desse jogo: ')
+                                            }
+                                        ])
+                                        patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, nomeNovo.nomeNovo)
+                                        break;
+
+                                    case 'instalado':
+                                        const statusInstalado = await inquirer.prompt([
+                                            {
+                                                type: 'list',
+                                                name: 'statusInstalado',
+                                                message: chalk.yellowBright.bold('\nSeu jogo continua instalado?'),
+                                                choices: [
+                                                    { name: 'Sim', value: 'sim' },
+                                                    { name: 'Não', value: 'nao' },
+                                                ]
+                                            }
+                                        ])
+                                        patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, statusInstalado.statusInstalado)
+                                        break;
+
+                                    case 'genero':
+                                        const generoNovo = await inquirer.prompt([
+                                            {
+                                                type: 'checkbox',
+                                                name: 'generoNovo',
+                                                message: chalk.yellowBright.bold('\nAtualize os gêneros desse jogo.'),
+                                                choices: [
+                                                    {
+                                                        name: "Ação", value: "Ação",
+                                                    },
+                                                    {
+                                                        name: "Aventura", value: "Aventura",
+                                                    },
+                                                    {
+                                                        name: "RPG", value: "RPG",
+                                                    },
+                                                    {
+                                                        name: "MMORPG", value: "MMORPG",
+                                                    },
+                                                    {
+                                                        name: "Estratégia", value: "Estratégia",
+                                                    },
+                                                    {
+                                                        name: "Simualação", value: "Simualação",
+                                                    },
+                                                    {
+                                                        name: "Esportes", value: "Esportes",
+                                                    },
+                                                    {
+                                                        name: "Luta", value: "Luta",
+                                                    },
+                                                    {
+                                                        name: "Terror", value: "Terror",
+                                                    },
+                                                    {
+                                                        name: "Plataforma", value: "Plataforma",
+                                                    },
+                                                    {
+                                                        name: "Puzzle", value: "Puzzle",
+                                                    },
+                                                    {
+                                                        name: "Hack'n'slash", value: "Hack'n'slash",
+                                                    },
+                                                    {
+                                                        name: "Battle Royale", value: "Battle Royale",
+                                                    },
+                                                    {
+                                                        name: "Musical", value: "Musical",
+                                                    },
+                                                ]
+                                            }
+                                        ])
+                                        patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, generoNovo.generoNovo)
+                                        break;
+
+
+                                }
+                            // patchJogo.idJogo = parseInt(patchJogo.idJogo)
+
+
+                        }
                     } else {
                         console.log(chalk.red.underline('\nSenha incorreta\n'))
-                        exibirMenu()
                     }
-
-
-
 
 
             }
