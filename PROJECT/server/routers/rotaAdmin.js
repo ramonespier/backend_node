@@ -4,17 +4,8 @@ const router = express.Router()
 
 router.use(express.json())
 
-function deletarJogo(id) {
-    try{
-        let naoDelete = [];
-        const AllData = fs.readFileSync('../repoJogos.json', 'utf8');
-        const allDataJson = JSON.parse(AllData);
-        naoDelete = allDataJson.filter(p => p.id !== id)
-        fs.writeFileSync('../repoJogos.json', JSON.stringify(naoDelete, null, 2))
-    } catch (err) {
-        console.error('Houve um erro ao ler e deletar o jogo do repositório.', err)
-    }
-}
+const data = fs.readFileSync('../repoJogos.json', 'utf8')
+const dados = JSON.parse(data)
 
 const autenticar = (req, res, next) => {
     const token = req.headers['authorization']
@@ -45,9 +36,31 @@ router.options('/', autenticar, (req, res) => {
 })
 
 router.post('/', autenticar, (req, res) => {
-    const novoJogo = req.body;
+    const novoJogo = req.body;//pode ter mis 
     console.log("Novo jogo cadastrado:", novoJogo)
-})
+
+    try {
+        let jsonData = []
+        const id = req.body.id;
+        console.log(id)
+        const caminho = '../repoJogos.json';
+        jsonData = JSON.parse(fs.readFileSync(caminho, 'utf8'));
+        const adicionar = jsonData.find(game => game.id === id); //TRUE 
+
+        if(adicionar) {
+            console.log("2")
+        } else {
+            jsonData.push(novoJogo)
+            console.log("1")
+            fs.writeFileSync(caminho, JSON.stringify(jsonData, null, 2), 'utf8');
+            res.send('Jogo adicionado com sucesso!');
+        }
+
+    } catch (error) {
+        console.error('Erro ao deletar:', error);
+        res.status(500).send('Erro ao remover jogo');
+    }
+});
 
 router.patch('/:id', autenticar, (req, res) => {
     try {

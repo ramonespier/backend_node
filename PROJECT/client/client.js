@@ -22,7 +22,7 @@ async function exibirDetalhesJogo(id) {
         const response = await axios.get(`${API_URL}/repositorio/${id}`)
         return response.data
     } catch (error) {
-        console.error(chalk.red.bold.underline(`Produto com o ID '${id}' não encontrado.`, error.message))
+        console.error(chalk.red.bold.underline(`Jogo com o ID '${id}' não encontrado.`, error.message))
         return null;
     }
 }
@@ -39,10 +39,11 @@ async function loginAdmin(id) {
         const response = await axios.get(`${API_URL}/admin`, authentic)
         return response.data
     } catch (error) {
-        console.error(chalk.red.bold.underline(`Produto com o ID '${id}' não encontrado.`, error.message))
+        console.error(chalk.red.bold.underline(`Jogo com o ID '${id}' não encontrado.`, error.message))
         return null;
     }
 }
+
 async function patchInfo(id, key, value) {
     const body = { [key]: value }
 
@@ -53,7 +54,7 @@ async function patchInfo(id, key, value) {
                 'Content-Type': 'application/json'
             }
         });
-        console.log(chalk.green.bold('Jogo atualizado com sucesso!'));
+        console.log(chalk.green.bold('\n\nJogo atualizado com sucesso!'));
     } catch (error) {
         console.error(chalk.red.underline('Insira um ID existente.\n'), error.message);
         exibirMenu()
@@ -62,10 +63,10 @@ async function patchInfo(id, key, value) {
 
 async function deleteInfo(id) {
     const resDelete = await axios.delete(`${API_URL}/admin/${id}`, {
-        headers: { 
+        headers: {
             'Authorization': 'SEGREDO',
             'Content-Type': 'application/json'
-         }
+        }
     });
     return resDelete.data;
 }
@@ -82,10 +83,10 @@ async function exibirMenu() {
                 { name: chalk.cyanBright.bold('Exibir detalhes de um único jogo'), value: 'exibir' },
                 { name: chalk.yellowBright.bold('Modo de administrador'), value: 'admin' },
                 { name: chalk.redBright.bold.underline('Sair do programa'), value: 'sair' },
-
             ]
         }
     ]
+
     async function menuAdmin() {
         const menuAdmin = [
             {
@@ -93,8 +94,6 @@ async function exibirMenu() {
                 name: 'opcaoAdm',
                 message: chalk.yellowBright.bold('\nEscolha uma opção:\n'),
                 choices: [
-                    { name: chalk.cyanBright.bold('Listar repositório'), value: 'listar' },
-                    { name: chalk.cyanBright.bold('Exibir detalhes de um único jogo'), value: 'exibir' },
                     { name: chalk.cyanBright.bold('Adicionar jogo'), value: 'post' },
                     { name: chalk.cyanBright.bold('Alterar informações de algum jogo'), value: 'patch' },
                     { name: chalk.yellow.bold('Excluir dados de algum jogo'), value: 'delete' },
@@ -125,9 +124,10 @@ async function exibirMenu() {
                 case 'exibir':
                     const idResposta = await inquirer.prompt([
                         {
-                            type: 'input',
+                            type: 'number',
                             name: 'id',
-                            message: chalk.blue('\nDigite o ID do produto: \n')
+                            default: 0,
+                            message: chalk.blue('\nDigite o ID do jogo: \n')
                         }
                     ]);
 
@@ -164,50 +164,14 @@ async function exibirMenu() {
                         const respostaAdm = await inquirer.prompt(menuAdmin);
                         switch (respostaAdm.opcaoAdm) {
 
-                            case 'listar':
-                                const jogos = await listarRepositorio();
-                                if (Array.isArray(jogos) && (jogos.length > 0)) {
-                                    console.log(chalk.greenBright('Jogos da sua lista:'))
-                                    jogos.forEach(jogo => {
-                                        console.log(`${chalk.cyanBright(jogo.id)}: ${chalk.greenBright(jogo.nome)} Instalado: ${chalk.yellowBright.bold(jogo.instalado)}`)
-                                    })
-                                    console.log('\n\n')
-                                } else {
-                                    console.log(chalk.yellowBright.bold('Nenhum jogo encontrado'))
-                                }
-                                exibirMenu()
-                                break
-
-                            case 'exibir':
-                                const idResposta = await inquirer.prompt([
-                                    {
-                                        type: 'input',
-                                        name: 'id',
-                                        message: chalk.blue('\nDigite o ID do produto: \n')
-                                    }
-                                ]);
-
-                                const jogo = await exibirDetalhesJogo(idResposta.id)
-                                if (jogo) {
-                                    console.log('\n\n')
-                                    console.log(chalk.greenBright.bold('Detalhes do jogo: '))
-                                    console.log(`${chalk.cyanBright(jogo.id)}: ${chalk.greenBright(jogo.nome)} - Gênero: ${chalk.magentaBright.bold(jogo.genero)}`);
-                                    console.log('\n\n')
-                                } else {
-                                    console.log('\n\n')
-                                    console.log(chalk.yellowBright('Jogo não encontrado.'))
-                                    console.log('\n\n')
-                                }
-
-                                exibirMenu();
-                                break;
-
+                            
                             case 'post':
 
                                 const jogoNovo = await inquirer.prompt([
                                     {
-                                        type: 'input',
+                                        type: 'number',
                                         name: 'id',
+                                        default: 0,
                                         message: chalk.blue('\nCrie um ID para seu novo jogo\n')
                                     },
                                     {
@@ -221,11 +185,11 @@ async function exibirMenu() {
                                         message: chalk.blue('\nDeseja instalar?\n'),
                                         choices: [
                                             {
-                                                name: "Sim",
+                                                name: chalk.magentaBright.bold("Sim"),
                                                 value: "Sim"
                                             },
                                             {
-                                                name: "Não",
+                                                name: chalk.magentaBright.bold("Não"),
                                                 value: "Não"
                                             },
 
@@ -237,46 +201,46 @@ async function exibirMenu() {
                                         message: chalk.blue('\nQual o gênero desse jogo?\n'),
                                         choices: [
                                             {
-                                                name: "Ação", value: "Ação",
+                                                name: chalk.yellowBright.bold("Ação"), value: "Ação",
                                             },
                                             {
-                                                name: "Aventura", value: "Aventura",
+                                                name: chalk.yellowBright.bold("Aventura"), value: "Aventura",
                                             },
                                             {
-                                                name: "RPG", value: "RPG",
+                                                name: chalk.yellowBright.bold("RPG"), value: "RPG",
                                             },
                                             {
-                                                name: "MMORPG", value: "MMORPG",
+                                                name: chalk.yellowBright.bold("MMORPG"), value: "MMORPG",
                                             },
                                             {
-                                                name: "Estratégia", value: "Estratégia",
+                                                name: chalk.yellowBright.bold("Estratégia"), value: "Estratégia",
                                             },
                                             {
-                                                name: "Simualação", value: "Simualação",
+                                                name: chalk.yellowBright.bold("Simualação"), value: "Simualação",
                                             },
                                             {
-                                                name: "Esportes", value: "Esportes",
+                                                name: chalk.yellowBright.bold("Esportes"), value: "Esportes",
                                             },
                                             {
-                                                name: "Luta", value: "Luta",
+                                                name: chalk.yellowBright.bold("Luta"), value: "Luta",
                                             },
                                             {
-                                                name: "Terror", value: "Terror",
+                                                name: chalk.yellowBright.bold("Terror"), value: "Terror",
                                             },
                                             {
-                                                name: "Plataforma", value: "Plataforma",
+                                                name: chalk.yellowBright.bold("Plataforma"), value: "Plataforma",
                                             },
                                             {
-                                                name: "Puzzle", value: "Puzzle",
+                                                name: chalk.yellowBright.bold("Puzzle"), value: "Puzzle",
                                             },
                                             {
-                                                name: "Hack'n'slash", value: "Hack'n'slash",
+                                                name: chalk.yellowBright.bold("Hack'n'slash"), value: "Hack'n'slash",
                                             },
                                             {
-                                                name: "Battle Royale", value: "Battle Royale",
+                                                name: chalk.yellowBright.bold("Battle Royale"), value: "Battle Royale",
                                             },
                                             {
-                                                name: "Musical", value: "Musical",
+                                                name: chalk.yellowBright.bold("Musical"), value: "Musical",
                                             },
                                         ]
                                     }
@@ -286,24 +250,22 @@ async function exibirMenu() {
 
                                     jogoNovo.id = parseInt(jogoNovo.id)
                                     if (isNaN(jogoNovo.id)) {
-                                        console.log(chalk.yellow.bold('O ID deve ser um número inteiro'))
+                                        console.log(chalk.yellow.bold('\nO ID deve ser um número inteiro\n'))
                                         exibirMenu()
                                         return;
                                     }
-                                    if (dados.some(jogo => jogo.id === jogoNovo.id)) {
-                                        console.log(chalk.yellow.bold("    Impossível criar um produto com ID já existente.\n    Verifique a lista de jogos e veja quais ID's voce pode usar."));
+                                    
+                                    if(jogoNovo.id <= 0) {
+                                        console.log(chalk.red("\nValores iguais ou menores a > 0 < não são ID's válido\n"))
                                         exibirMenu()
+                                        return;
+                                    }
+
+                                    if (dados.some(jogo => jogo.id === jogoNovo.id)) {
+                                        console.log(chalk.red.bold("Acesse a lista para ver quais ID's estão disponíveis."));
                                         return;
                                         // A função some() executa a função callback uma vez para cada elemento do array até encontrar aquele em que a função callback retorne true. Então o método some() retorna true imediatamente e não avalia os elementos restantes.Se nenhum elemento fizer a função callback retornar true, o método some() vai retornar false. 
                                         // medium.com
-
-                                    } else {
-                                        dados.push(jogoNovo);
-                                        const jsonData = JSON.stringify(dados, null, 2);
-                                        console.log(chalk.greenBright.bold('Jogo adicionado ao repositório com sucesso!'));
-                                        fs.writeFileSync('../server/repoJogos.json', jsonData);
-                                        exibirMenu()
-
                                     }
 
                                     axios.post(`${API_URL}/admin`, jogoNovo, {
@@ -325,22 +287,29 @@ async function exibirMenu() {
                             case 'patch':
                                 const patchJogo = await inquirer.prompt([
                                     {
-                                        type: 'input',
+                                        type: 'number',
                                         name: 'idJogo',
-                                        message: chalk.blue('\nDigite o ID do jogo que deseja alterar informação: ')
+                                        default: 0,
+                                        message: chalk.blueBright.bold('\nDigite o ID do jogo que deseja alterar informação: ')
                                     },
                                     {
                                         type: 'list',
                                         name: 'opcaoPatch',
-                                        message: chalk.cyanBright.bold('Qual informação você deseja alterar?'),
+                                        message: chalk.magentaBright.bold('Qual informação você deseja alterar?'),
                                         choices: [
-                                            { name: 'Nome: ', value: 'nome' },
-                                            { name: 'Instalado? ', value: 'instalado' },
-                                            { name: 'Gênero: ', value: 'genero' },
+                                            { name: chalk.cyanBright.bold('NOME'), value: 'nome', default: 'nome'},
+                                            { name: chalk.cyanBright.bold('INSTALADO'), value: 'instalado', default: 'SIM' },
+                                            { name: chalk.cyanBright.bold('GÊNERO'), value: 'genero', default: 'Ação' },
                                         ]
                                     }
                                 ])
-
+                                
+                                if(patchJogo.idJogo <= 0 || patchJogo.idJogo !== dados.id) {
+                                    console.log(chalk.red('\nInsira um ID existente.\n'))
+                                    exibirMenu()
+                                    return;
+                                }
+                                
                                 switch (patchJogo.opcaoPatch) {
                                     case 'nome':
                                         const nomeNovo = await inquirer.prompt([
@@ -351,6 +320,7 @@ async function exibirMenu() {
                                             }
                                         ])
                                         await patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, nomeNovo.nomeNovo);
+                                        exibirMenu()
                                         break;
 
                                     case 'instalado':
@@ -366,6 +336,7 @@ async function exibirMenu() {
                                             }
                                         ])
                                         patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, statusInstalado.statusInstalado)
+                                        exibirMenu()
                                         break;
 
                                     case 'genero':
@@ -376,64 +347,75 @@ async function exibirMenu() {
                                                 message: chalk.yellowBright.bold('\nAtualize os gêneros desse jogo.'),
                                                 choices: [
                                                     {
-                                                        name: "Ação", value: "Ação",
+                                                        name: chalk.yellowBright.bold("Ação"), value: "Ação",
                                                     },
                                                     {
-                                                        name: "Aventura", value: "Aventura",
+                                                        name: chalk.yellowBright.bold("Aventura"), value: "Aventura",
                                                     },
                                                     {
-                                                        name: "RPG", value: "RPG",
+                                                        name: chalk.yellowBright.bold("RPG"), value: "RPG",
                                                     },
                                                     {
-                                                        name: "MMORPG", value: "MMORPG",
+                                                        name: chalk.yellowBright.bold("MMORPG"), value: "MMORPG",
                                                     },
                                                     {
-                                                        name: "Estratégia", value: "Estratégia",
+                                                        name: chalk.yellowBright.bold("Estratégia"), value: "Estratégia",
                                                     },
                                                     {
-                                                        name: "Simualação", value: "Simualação",
+                                                        name: chalk.yellowBright.bold("Simualação"), value: "Simualação",
                                                     },
                                                     {
-                                                        name: "Esportes", value: "Esportes",
+                                                        name: chalk.yellowBright.bold("Esportes"), value: "Esportes",
                                                     },
                                                     {
-                                                        name: "Luta", value: "Luta",
+                                                        name: chalk.yellowBright.bold("Luta"), value: "Luta",
                                                     },
                                                     {
-                                                        name: "Terror", value: "Terror",
+                                                        name: chalk.yellowBright.bold("Terror"), value: "Terror",
                                                     },
                                                     {
-                                                        name: "Plataforma", value: "Plataforma",
+                                                        name: chalk.yellowBright.bold("Plataforma"), value: "Plataforma",
                                                     },
                                                     {
-                                                        name: "Puzzle", value: "Puzzle",
+                                                        name: chalk.yellowBright.bold("Puzzle"), value: "Puzzle",
                                                     },
                                                     {
-                                                        name: "Hack'n'slash", value: "Hack'n'slash",
+                                                        name: chalk.yellowBright.bold("Hack'n'slash"), value: "Hack'n'slash",
                                                     },
                                                     {
-                                                        name: "Battle Royale", value: "Battle Royale",
+                                                        name: chalk.yellowBright.bold("Battle Royale"), value: "Battle Royale",
                                                     },
                                                     {
-                                                        name: "Musical", value: "Musical",
+                                                        name: chalk.yellowBright.bold("Musical"), value: "Musical",
                                                     },
                                                 ]
                                             }
                                         ])
                                         patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, generoNovo.generoNovo)
+                                        exibirMenu()
                                         break;
                                 }
+
+                                break;
 
                             case 'delete':
                                 const excluirJogo = await inquirer.prompt([
                                     {
-                                        type: 'input',
+                                        type: 'number',
                                         name: 'id',
+                                        default: 0,
                                         message: chalk.blue('\nDigite o ID do jogo a ser removido: ')
                                     }
                                 ])
 
                                 const id = parseInt(excluirJogo.id)
+                                
+                                if(id.id <= 0 || id.id !== dados.id) {
+                                    console.log(chalk.red('\nInsira um ID existente.\n'))
+                                    exibirMenu()
+                                    return;
+                                }
+
                                 if (isNaN(id)) {
                                     console.log(chalk.red.bold('O ID deve ser um número inteiro'))
                                     exibirMenu()
@@ -442,17 +424,31 @@ async function exibirMenu() {
 
                                 try {
                                     await deleteInfo(excluirJogo.id)
-                                    console.log(chalk.green.bold('\nJogo removido com sucesso!'));
+                                    console.log(chalk.green.bold('\nJogo removido com sucesso!\n'));
+                                    exibirMenu()
+                                    return;
+
                                 } catch (error) {
                                     console.log(chalk.red('Erro ao remover o jogo', error.message))
+                                    exibirMenu()
+                                    
                                 }
 
-                                exibirMenu()
+                                break;
+
+                            case 'sair':
+                                console.log(chalk.magentaBright.bold('\n SAINDO DO SISTEMA . . . .'))
                                 break;
                         }
                     } else {
                         console.log(chalk.red.underline('\nSenha incorreta\n'))
+                        exibirMenu()
+                        return;
                     }
+
+                case 'sair':
+                    console.log(chalk.magentaBright.bold('\n SAINDO DO SISTEMA . . . .'))
+                    break;
 
             }
         } catch (error) {
