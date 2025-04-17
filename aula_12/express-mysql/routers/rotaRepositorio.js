@@ -1,6 +1,6 @@
 import express from 'express'
-const router = express.Router()
 import db from '../db.js';
+const router = express.Router()
 
 router.get('/', async (req, res) => {
     try {

@@ -51,7 +51,7 @@ async function patchInfo(id, key, value) {
                 'Content-Type': 'application/json'
             }
         });
-        console.log(chalk.green.bold('\n\nJogo atualizado com sucesso!'));
+        console.log(chalk.green.bold('\n\nJogo alterado com sucesso!'));
     } catch (error) {
         console.error(chalk.red.underline('Insira um ID existente.\n'), error.message);
         exibirMenu()
@@ -212,157 +212,103 @@ async function exibirMenu() {
                                 exibirMenu()
                                 break;
 
-    //                         case 'patch':
-    //                             const patchJogo = await inquirer.prompt([
-    //                                 {
-    //                                     type: 'number',
-    //                                     name: 'idJogo',
-    //                                     default: 0,
-    //                                     message: chalk.blueBright.bold('\nDigite o ID do jogo que deseja alterar informação: ')
-    //                                 },
-    //                                 {
-    //                                     type: 'list',
-    //                                     name: 'opcaoPatch',
-    //                                     message: chalk.magentaBright.bold('Qual informação você deseja alterar?'),
-    //                                     choices: [
-    //                                         { name: chalk.cyanBright.bold('NOME'), value: 'nome', default: 'nome' },
-    //                                         { name: chalk.cyanBright.bold('INSTALADO'), value: 'instalado', default: 'SIM' },
-    //                                         { name: chalk.cyanBright.bold('GÊNERO'), value: 'genero', default: 'Ação' },
-    //                                     ]
-    //                                 }
-    //                             ])
+                            
+                            case 'patch':
+                                const patchJogo = await inquirer.prompt([
+                                    {
+                                        type: 'number',
+                                        name: 'idJogo',
+                                        default: 0,
+                                        message: chalk.blueBright.bold('\nDigite o ID do jogo que deseja alterar informação: ')
+                                    },
+                                    {
+                                        type: 'list',
+                                        name: 'opcaoPatch',
+                                        message: chalk.magentaBright.bold('Qual informação você deseja alterar?'),
+                                        choices: [
+                                            { name: chalk.cyanBright.bold('NOME'), value: 'nome', default: 'nome' },
+                                            { name: chalk.cyanBright.bold('INSTALADO'), value: 'is_installed', default: 'SIM' },
+                                            { name: chalk.cyanBright.bold('GÊNERO'), value: 'genero', default: 'Ação' },
+                                        ]
+                                    }
+                                ])
 
-    //                             if (patchJogo.idJogo <= 0 || patchJogo.idJogo !== dados.id) {
-    //                                 console.log(chalk.red('\nInsira um ID existente.\n'))
-    //                                 exibirMenu()
-    //                                 return;
-    //                             }
+                                switch (patchJogo.opcaoPatch) {
+                                    case 'nome':
+                                        const nomeNovo = await inquirer.prompt([
+                                            {
+                                                type: 'input',
+                                                name: 'nomeNovo',
+                                                message: chalk.blue('\nDigite o nome novo desse jogo: ')
+                                            }
+                                        ])
+                                        await patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, nomeNovo.nomeNovo);
+                                        exibirMenu()
+                                        break;
 
-    //                             switch (patchJogo.opcaoPatch) {
-    //                                 case 'nome':
-    //                                     const nomeNovo = await inquirer.prompt([
-    //                                         {
-    //                                             type: 'input',
-    //                                             name: 'nomeNovo',
-    //                                             message: chalk.blue('\nDigite o nome novo desse jogo: ')
-    //                                         }
-    //                                     ])
-    //                                     await patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, nomeNovo.nomeNovo);
-    //                                     exibirMenu()
-    //                                     break;
+                                    case 'is_installed':
+                                        const statusInstalado = await inquirer.prompt([
+                                            {
+                                                type: 'list',
+                                                name: 'statusInstalado',
+                                                message: chalk.yellowBright.bold('\nSeu jogo continua instalado?'),
+                                                choices: [
+                                                    { name: 'Sim', value: true },
+                                                    { name: 'Não', value: false },
+                                                ]
+                                            }
+                                        ])
+                                        patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, statusInstalado.statusInstalado)
+                                        exibirMenu()
+                                        break;
 
-    //                                 case 'instalado':
-    //                                     const statusInstalado = await inquirer.prompt([
-    //                                         {
-    //                                             type: 'list',
-    //                                             name: 'statusInstalado',
-    //                                             message: chalk.yellowBright.bold('\nSeu jogo continua instalado?'),
-    //                                             choices: [
-    //                                                 { name: 'Sim', value: 'SIM' },
-    //                                                 { name: 'Não', value: 'NÃO' },
-    //                                             ]
-    //                                         }
-    //                                     ])
-    //                                     patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, statusInstalado.statusInstalado)
-    //                                     exibirMenu()
-    //                                     break;
+                                    case 'genero':
+                                        const generoNovo = await inquirer.prompt([
+                                            {
+                                                type: 'input',
+                                                name: 'generoNovo',
+                                                message: chalk.yellowBright.bold('\nAtualize os gêneros desse jogo.'),
+    
+                                            }
+                                        ])
+                                        patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, generoNovo.generoNovo)
+                                        exibirMenu()
+                                        break;
+                                }
 
-    //                                 case 'genero':
-    //                                     const generoNovo = await inquirer.prompt([
-    //                                         {
-    //                                             type: 'checkbox',
-    //                                             name: 'generoNovo',
-    //                                             message: chalk.yellowBright.bold('\nAtualize os gêneros desse jogo.'),
-    //                                             choices: [
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("Ação"), value: 1,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("Aventura"), value: 2,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("RPG"), value: 3,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("MMORPG"), value: 4,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("Estratégia"), value: 5,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("Simualação"), value: 6,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("Esportes"), value: 7,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("Luta"), value: 8,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("Terror"), value: 9,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("Plataforma"), value: 10,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("Puzzle"), value: 11,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("Hack'n'slash"), value: 12,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("Battle Royale"), value: 13,
-    //                                                 },
-    //                                                 {
-    //                                                     name: chalk.yellowBright.bold("Musical"), value: 14,
-    //                                                 },
-    //                                             ]
-    //                                         }
-    //                                     ])
-    //                                     patchInfo(patchJogo.idJogo, patchJogo.opcaoPatch, generoNovo.generoNovo)
-    //                                     exibirMenu()
-    //                                     break;
-    //                             }
+                                break;
 
-    //                             break;
+                            case 'delete':
+                                const excluirJogo = await inquirer.prompt([
+                                    {
+                                        type: 'number',
+                                        name: 'id',
+                                        default: 0,
+                                        message: chalk.blue('\nDigite o ID do jogo a ser removido: ')
+                                    }
+                                ])
 
-    //                         case 'delete':
-    //                             const excluirJogo = await inquirer.prompt([
-    //                                 {
-    //                                     type: 'number',
-    //                                     name: 'id',
-    //                                     default: 0,
-    //                                     message: chalk.blue('\nDigite o ID do jogo a ser removido: ')
-    //                                 }
-    //                             ])
+                                const id = parseInt(excluirJogo.id)                              
 
-    //                             const id = parseInt(excluirJogo.id)
+                                if (isNaN(id)) {
+                                    console.log(chalk.red.bold('O ID deve ser um número inteiro'))
+                                    exibirMenu()
+                                    return;
+                                }
 
-    //                             if (id.id <= 0 || id.id !== dados.id) {
-    //                                 console.log(chalk.red('\nInsira um ID existente.\n'))
-    //                                 exibirMenu()
-    //                                 return;
-    //                             }
+                                try {
+                                    await deleteInfo(excluirJogo.id)
+                                    console.log(chalk.green.bold('\nJogo removido com sucesso!\n'));
+                                    exibirMenu()
+                                    return;
 
-    //                             if (isNaN(id)) {
-    //                                 console.log(chalk.red.bold('O ID deve ser um número inteiro'))
-    //                                 exibirMenu()
-    //                                 return;
-    //                             }
+                                } catch (error) {
+                                    console.log(chalk.red('Erro ao remover o jogo', error.message))
+                                    exibirMenu()
 
-    //                             try {
-    //                                 await deleteInfo(excluirJogo.id)
-    //                                 console.log(chalk.green.bold('\nJogo removido com sucesso!\n'));
-    //                                 exibirMenu()
-    //                                 return;
+                                }
 
-                                // } catch (error) {
-                                //     console.log(chalk.red('Erro ao remover o jogo', error.message))
-                                //     exibirMenu()
-
-                                // }
-
-                                // break;
+                                break;
 
                             case 'sair':
                                 console.log(chalk.magentaBright.bold('\n SAINDO DO SISTEMA . . . .'))

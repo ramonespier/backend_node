@@ -29,7 +29,7 @@ router.get('/', autenticar, (req, res) => {
 })
 
 router.options('/', autenticar, (req, res) => {
-    res.header('Allow', 'GET, POST, DELETE, PATCH');
+    res.header('Allow', 'GET, POST, DELETE, PUT');
     res.status(204).send()
 })
 
@@ -40,25 +40,43 @@ router.post('/', autenticar, async (req, res) => {
         res.status(201).json({ id: result.insertId, nome, is_installed, genero });
     } catch (err) {
         console.error(err);
-        res.status(500).send(result)
+        res.status(500).send('Erro ao inserir na dados na tabela jogos.')
     }
 });
 
+router.patch('/:id', autenticar, async (req, res) => {
+    const { id } = req.params;
+    const { nome, is_installed, genero } = req.body;
 
-// router.delete('/:id', autenticar, (req, res) => {
-//     try {
-//         const id = parseInt(req.params.id);
-//         const caminho = '../repoJogos.json';
-//         const data = JSON.parse(fs.readFileSync(caminho, 'utf8'));
-//         const deletar = data.filter(game => game.id !== id);
+    try {
+        const [result] = await db.query('UPDATE jogos SET nome = ?, is_installed = ?, genero = ? WHERE id = ?', [nome, is_installed, genero, id])
+        if (result.affectedRows > 0) {
+            res.status(201).json({ nome, is_installed, genero })
+        } else {
+            res.status(404).send('Jogo não encontrado')
+        }
 
-//         fs.writeFileSync(caminho, JSON.stringify(deletar, null, 2));
-//         res.send('Jogo removido com sucesso!');
+    } catch (err) {
+        console.error(err)
+        res.status(500).send('Erro ao atualizar dados na tabela jogos')
+    }
+})
 
-//     } catch (error) {
-//         console.error('Erro ao deletar:', error);
-//         res.status(500).send('Erro ao remover jogo');
-//     }
-// });
+
+router.delete('/:id', autenticar, async (req, res) => {
+    const {id} = req.params;
+
+    try {
+        const [result] = await db.query('DELETE FROM jogos WHERE id = ?', [id])
+        if(result.affectedRows > 0) {
+            res.status(201).send('Pedido excluído com sucesso!')
+        } else {
+            res.status(404).send('ID não encontrado.')
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Erro ao excluir dados na tabela jogos')
+    }
+});
 
 export default router;
