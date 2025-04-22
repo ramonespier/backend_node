@@ -61,7 +61,7 @@ async function create(table, data) {
     const connection = await getConnection()
     try {
         const columns = Object.keys(data).join(', ');
-        const placeholders = Array(Object.keys(data).lenght).fill('?').join(', ')
+        const placeholders = Array(Object.keys(data).length).fill('?').join(', ')
         // VALUES (?, ?, ?)
 
         const sql = `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`;
