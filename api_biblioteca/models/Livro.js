@@ -1,4 +1,4 @@
-    import { readAll, read, deleteRecord } from '../config/database.js'
+    import { readAll, read, create, update, deleteRecord } from '../config/database.js'
 
     const listarLivros = async () => {
         try {

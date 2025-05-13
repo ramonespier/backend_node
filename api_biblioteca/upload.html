@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Upload de Livro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+        label {
+            margin-top: 10px;
+        }
+        input[type="text"],
+        input[type="file"] {
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Adicionar Novo Livro</h1>
+
+    <form id="livroForm">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" required>
+
+        <label for="descricao">Descrição:</label>
+        <input type="text" id="descricao" name="descricao" required>
+
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn" name="isbn" required>
+
+        <label for="capa">Capa do Livro:</label>
+        <input type="file" id="capa" name="capa" accept="image/*" required>
+
+        <button type="submit">Adicionar Livro</button>
+    </form>
+
+    <div id="response">
+        Resposta do Servidor:
+        <pre id="responseContent"></pre>
+    </div>
+
+    <script>
+        document.getElementById('livroForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const form = document.getElementById('livroForm');
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('http://localhost:3000/livros', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidGlwbyI6ImNvbXVtIiwiaWF0IjoxNzQ3MTQzMDk5LCJleHAiOjE3NDcxNDY2OTl9.9sjirl_F_xGco8GtlaEM1IntjfOri9X47DdxUBQKfoc' // Substitua pelo seu token JWT
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                document.getElementById('responseContent').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('responseContent').textContent = 'Erro ao enviar os dados.';
+            }
+        });
+    </script>
+
+</body>
+</html>
