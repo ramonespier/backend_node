@@ -4,7 +4,7 @@
         try {
             return await readAll('livros')
         } catch (err) {
-            console.err('Erro ao obter livros', err)
+            console.error('Erro ao obter livros', err)
             throw err;
         }
     }
